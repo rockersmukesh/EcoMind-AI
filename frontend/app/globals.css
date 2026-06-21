@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: var(--background-color);
+  --color-foreground: var(--foreground-color);
+  
+  --color-card: var(--card-color);
+  --color-card-foreground: var(--card-foreground-color);
+  
+  --color-primary: var(--primary-color);
+  --color-primary-foreground: var(--primary-foreground-color);
+  
+  --color-secondary: var(--secondary-color);
+  --color-secondary-foreground: var(--secondary-foreground-color);
+  
+  --color-accent: var(--accent-color);
+  --color-accent-foreground: var(--accent-foreground-color);
+  
+  --color-border: var(--border-color);
+  --color-ring: var(--primary-color);
+  
+  --font-sans: var(--font-geist-sans), Inter, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+  
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-fade-in: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+:root {
+  --background-color: hsl(222 47% 11%);
+  --foreground-color: hsl(210 40% 98%);
+  --card-color: hsl(224 71% 4%);
+  --card-foreground-color: hsl(210 40% 98%);
+  --primary-color: hsl(142 71% 45%);
+  --primary-foreground-color: hsl(222 47% 11%);
+  --secondary-color: hsl(215 27.9% 16.9%);
+  --secondary-foreground-color: hsl(210 40% 98%);
+  --accent-color: hsl(162 84% 41%);
+  --accent-foreground-color: hsl(222 47% 11%);
+  --border-color: hsl(217.2 32.6% 17.5%);
+  color-scheme: dark;
+}
+
+:root.light {
+  --background-color: hsl(0 0% 98%);
+  --foreground-color: hsl(222 47% 11%);
+  --card-color: hsl(0 0% 100%);
+  --card-foreground-color: hsl(222 47% 11%);
+  --primary-color: hsl(142 71% 45%);
+  --primary-foreground-color: hsl(0 0% 100%);
+  --secondary-color: hsl(210 40% 96.1%);
+  --secondary-foreground-color: hsl(222 47% 11%);
+  --accent-color: hsl(162 84% 41%);
+  --accent-foreground-color: hsl(0 0% 100%);
+  --border-color: hsl(214.3 31.8% 91.4%);
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Premium Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-secondary);
+}
+
+/* Custom interactive animations */
+.glow-on-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glow-on-hover:hover {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.glass-card {
+  background: rgba(11, 15, 25, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+}
+
+/* Light Theme Card Color Override (Premium SaaS Off-White/Shadow Canvas) */
+:root.light .glass-card {
+  background: hsl(0 0% 100%) !important;
+  border-color: hsl(214.3 32% 91%) !important;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 8px -1px rgba(0, 0, 0, 0.03) !important;
+}
+
+:root.light .glass-card h1,
+:root.light .glass-card h2,
+:root.light .glass-card h3,
+:root.light .glass-card h4,
+:root.light .glass-card p,
+:root.light .glass-card li,
+:root.light .glass-card label,
+:root.light .glass-card span:not(.text-primary):not(.text-accent):not(.text-red-400),
+:root.light .glass-card div:not(.text-primary):not(.text-accent):not(.text-red-400) {
+  color: hsl(222 47% 11%) !important;
+}
+

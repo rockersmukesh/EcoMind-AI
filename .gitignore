@@ -1,0 +1,45 @@
+# Dependency directories
+node_modules/
+.venv/
+venv/
+ENV/
+
+# Next.js build outputs
+.next/
+out/
+build/
+dist/
+
+# Python cache & logs
+__pycache__/
+*.py[cod]
+*$py.class
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Local configurations & secrets
+.env
+.env.local
+.env.*.local
+*.json
+!package.json
+!tsconfig.json
+!firebase.json
+
+# IDEs & Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# LLM Workspace & Agent States
+.gemini/
+.system_generated/
+*.log
