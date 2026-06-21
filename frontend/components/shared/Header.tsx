@@ -16,26 +16,31 @@ export default function Header() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
-    // Check if user is saved in session storage for continuity
     const savedUser = sessionStorage.getItem("eco_user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-
-    // Set theme on mount
     const savedTheme = localStorage.getItem("eco_theme") as "dark" | "light" | null;
-    if (savedTheme === "light") {
-      setTheme("light");
-      document.documentElement.classList.add("light");
-    } else {
-      setTheme("dark");
-      document.documentElement.classList.remove("light");
-    }
+
+    const timer = setTimeout(() => {
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+      }
+      if (savedTheme === "light") {
+        setTheme("light");
+        document.documentElement.classList.add("light");
+      } else {
+        setTheme("dark");
+        document.documentElement.classList.remove("light");
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Close mobile menu on page transitions
   useEffect(() => {
-    setIsMobileMenuOpen(false);
+    const timer = setTimeout(() => {
+      setIsMobileMenuOpen(false);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   const toggleTheme = () => {

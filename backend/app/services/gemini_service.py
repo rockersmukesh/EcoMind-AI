@@ -13,7 +13,10 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 else:
-    logging.warning("GEMINI_API_KEY not found in environment variables. Gemini service will run in mock mode.")
+    logging.warning(
+        "GEMINI_API_KEY not found in environment variables. Gemini service will run in mock mode."
+    )
+
 
 class GeminiCoachService:
     @staticmethod
@@ -66,9 +69,7 @@ class GeminiCoachService:
         try:
             response = model.generate_content(
                 prompt,
-                generation_config={
-                    "response_mime_type": "application/json"
-                }
+                generation_config={"response_mime_type": "application/json"},
             )
             # Parse the response text as JSON
             result = json.loads(response.text)
@@ -86,7 +87,9 @@ class GeminiCoachService:
         """
         model = cls._get_model()
         if not model:
-            return cls._get_mock_simulation_feedback(current_profile, simulated_profile)
+            return cls._get_mock_simulation_feedback(
+                current_profile, simulated_profile
+            )
 
         prompt = f"""
         You are an AI Sustainability Coach.
@@ -120,96 +123,110 @@ class GeminiCoachService:
         try:
             response = model.generate_content(
                 prompt,
-                generation_config={
-                    "response_mime_type": "application/json"
-                }
+                generation_config={"response_mime_type": "application/json"},
             )
             result = json.loads(response.text)
             return result
         except Exception as e:
             logging.error(f"Gemini API simulation feedback failure: {e}")
-            return cls._get_mock_simulation_feedback(current_profile, simulated_profile)
+            return cls._get_mock_simulation_feedback(
+                current_profile, simulated_profile
+            )
 
     @staticmethod
     def _get_mock_recommendations(profile: Dict) -> Dict:
         """Fallback mock function when Gemini is unavailable or key is missing."""
         total = profile.get("total_kg", 500)
         eco_score = max(10, min(95, int(100 - (total / 20))))
-        
+
         # Determine highest contributor
         drivers = []
         recommendations = []
-        
+
         trans = profile.get("transportation_kg", 0)
         diet = profile.get("diet_kg", 0)
         energy = profile.get("energy_kg", 0)
         shopping = profile.get("shopping_kg", 0)
-        
+
         max_val = max(trans, diet, energy, shopping)
-        
+
         if max_val == trans:
             drivers.append("Daily transportation fuel consumption")
-            recommendations.append({
-                "action": "Consider switching to remote work 2 days/week or carpooling.",
-                "difficulty": "low",
-                "cost": "low",
-                "impact": "high",
-                "estimated_annual_savings_kg": round(trans * 12 * 0.4, 2),
-                "explanation": "Reducing drive days directly saves gas emissions without major upfront investments."
-            })
+            recommendations.append(
+                {
+                    "action": "Consider switching to remote work 2 days/week or carpooling.",
+                    "difficulty": "low",
+                    "cost": "low",
+                    "impact": "high",
+                    "estimated_annual_savings_kg": round(trans * 12 * 0.4, 2),
+                    "explanation": "Reducing drive days directly saves gas emissions without major upfront investments.",
+                }
+            )
         elif max_val == diet:
             drivers.append("High emissions food diet (meat/dairy)")
-            recommendations.append({
-                "action": "Introduce Meatless Mondays into your weekly meal planning.",
-                "difficulty": "low",
-                "cost": "low",
-                "impact": "medium",
-                "estimated_annual_savings_kg": round(diet * 12 * 0.15, 2),
-                "explanation": "Shifting even one day of meals to vegetarian options yields significant collective emissions improvements."
-            })
+            recommendations.append(
+                {
+                    "action": "Introduce Meatless Mondays into your weekly meal planning.",
+                    "difficulty": "low",
+                    "cost": "low",
+                    "impact": "medium",
+                    "estimated_annual_savings_kg": round(diet * 12 * 0.15, 2),
+                    "explanation": "Shifting even one day of meals to vegetarian options yields significant collective emissions improvements.",
+                }
+            )
         elif max_val == energy:
             drivers.append("Home grid utility reliance")
-            recommendations.append({
-                "action": "Audit house insulation and transition to smart thermostat settings.",
-                "difficulty": "medium",
-                "cost": "low",
-                "impact": "medium",
-                "estimated_annual_savings_kg": round(energy * 12 * 0.1, 2),
-                "explanation": "Optimization of climate control settings matches grid load reductions."
-            })
+            recommendations.append(
+                {
+                    "action": "Audit house insulation and transition to smart thermostat settings.",
+                    "difficulty": "medium",
+                    "cost": "low",
+                    "impact": "medium",
+                    "estimated_annual_savings_kg": round(energy * 12 * 0.1, 2),
+                    "explanation": "Optimization of climate control settings matches grid load reductions.",
+                }
+            )
         else:
             drivers.append("Frequent new clothing and retail updates")
-            recommendations.append({
-                "action": "Opt for thrifting or high-quality lifetime items.",
-                "difficulty": "medium",
-                "cost": "low",
-                "impact": "medium",
-                "estimated_annual_savings_kg": round(shopping * 12 * 0.25, 2),
-                "explanation": "Extending retail usage lifecycles avoids global freight logistics footprints."
-            })
+            recommendations.append(
+                {
+                    "action": "Opt for thrifting or high-quality lifetime items.",
+                    "difficulty": "medium",
+                    "cost": "low",
+                    "impact": "medium",
+                    "estimated_annual_savings_kg": round(
+                        shopping * 12 * 0.25, 2
+                    ),
+                    "explanation": "Extending retail usage lifecycles avoids global freight logistics footprints.",
+                }
+            )
 
         return {
             "eco_score_estimate": eco_score,
             "analysis": "Based on statistical carbon data, your current configuration has opportunities for optimization.",
             "primary_drivers": drivers,
             "recommendations": recommendations,
-            "confidence_score": 0.85
+            "confidence_score": 0.85,
         }
 
     @staticmethod
     def _get_mock_simulation_feedback(current: Dict, simulated: Dict) -> Dict:
         """Fallback mock function for simulation comparisons."""
-        savings = max(0.0, current.get("total_kg", 0) - simulated.get("total_kg", 0))
+        savings = max(
+            0.0, current.get("total_kg", 0) - simulated.get("total_kg", 0)
+        )
         yearly_savings = savings * 12
-        trees_equivalent = round(yearly_savings / 22.0) # 1 tree absorbs ~22kg CO2/year
+        trees_equivalent = round(
+            yearly_savings / 22.0
+        )  # 1 tree absorbs ~22kg CO2/year
 
         return {
             "comparison_summary": "Your simulated carbon choices represent a reduction in emissions across critical sectors.",
             "projected_yearly_savings_kg": round(yearly_savings, 2),
             "achievable_milestones": [
                 f"Equivalent to planting {trees_equivalent} trees per year",
-                f"Reduces monthly load by {round(savings, 2)} kg CO2"
+                f"Reduces monthly load by {round(savings, 2)} kg CO2",
             ],
             "coach_verdict": "This simulation shows excellent progress. Committing to these changes in real life makes a tangible global difference.",
-            "confidence_score": 0.80
+            "confidence_score": 0.80,
         }

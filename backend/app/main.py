@@ -27,7 +27,9 @@ allowed_origins = [
 # Support custom allowed origins from environment variable
 env_origins = os.getenv("ALLOWED_ORIGINS")
 if env_origins:
-    allowed_origins.extend([origin.strip() for origin in env_origins.split(",") if origin.strip()])
+    allowed_origins.extend(
+        [origin.strip() for origin in env_origins.split(",") if origin.strip()]
+    )
 
 app.add_middleware(
     CORSMiddleware,
@@ -43,12 +45,13 @@ def health_check():
     return {
         "status": "healthy",
         "service": "EcoAI Carbon Twin API",
-        "version": "1.0.0"
+        "version": "1.0.0",
     }
 
 
 if __name__ == "__main__":
     import uvicorn
+
     port = int(os.getenv("PORT", 8080))
     host = os.getenv("HOST", "0.0.0.0")
     uvicorn.run("main:app", host=host, port=port, reload=True)

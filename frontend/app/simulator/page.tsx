@@ -46,7 +46,10 @@ export default function SimulatorPage() {
 
   useEffect(() => {
     // Run initial calculations on mount
-    triggerSimulation();
+    const timer = setTimeout(() => {
+      triggerSimulation();
+    }, 0);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -57,7 +57,10 @@ export default function CoachPage() {
   };
 
   useEffect(() => {
-    loadCoachRecommendations();
+    const timer = setTimeout(() => {
+      loadCoachRecommendations();
+    }, 0);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

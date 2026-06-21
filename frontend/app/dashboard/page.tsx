@@ -64,7 +64,10 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
-    loadDashboardData();
+    const timer = setTimeout(() => {
+      loadDashboardData();
+    }, 0);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

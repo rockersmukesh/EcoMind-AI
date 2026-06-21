@@ -3,6 +3,7 @@ from app.services.calculator import CarbonCalculator, CarbonProfileInput
 
 router = APIRouter()
 
+
 @router.post("/calculate")
 def calculate_footprint(profile: CarbonProfileInput):
     """
@@ -10,9 +11,6 @@ def calculate_footprint(profile: CarbonProfileInput):
     """
     try:
         results = CarbonCalculator.calculate_profile(profile)
-        return {
-            "success": True,
-            "data": results
-        }
+        return {"success": True, "data": results}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
