@@ -6,63 +6,42 @@ import { Leaf, LogIn, LogOut, Award, Menu, X, Sun, Moon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { mockLogin, MockUser } from "@/lib/firebase";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "@/hooks/useTheme";
+import {
+  STORAGE_KEYS,
+  DEFAULT_VALUES,
+  NAVIGATION,
+  ARIA_LABELS,
+} from "@/lib/config";
 
 export default function Header() {
   const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
   const [user, setUser] = useState<MockUser | null>(null);
-  const [ecoScore] = useState<number>(72);
+  const [ecoScore] = useState<number>(DEFAULT_VALUES.ECO_SCORE);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
-    const savedUser = sessionStorage.getItem("eco_user");
-    const savedTheme = localStorage.getItem("eco_theme") as "dark" | "light" | null;
-
-    const timer = setTimeout(() => {
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
-      }
-      if (savedTheme === "light") {
-        setTheme("light");
-        document.documentElement.classList.add("light");
-      } else {
-        setTheme("dark");
-        document.documentElement.classList.remove("light");
-      }
-    }, 0);
-
-    return () => clearTimeout(timer);
+    const savedUser = sessionStorage.getItem(STORAGE_KEYS.USER);
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
   }, []);
 
   // Close mobile menu on page transitions
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsMobileMenuOpen(false);
-    }, 0);
-    return () => clearTimeout(timer);
+    setIsMobileMenuOpen(false);
   }, [pathname]);
-
-  const toggleTheme = () => {
-    if (theme === "dark") {
-      setTheme("light");
-      document.documentElement.classList.add("light");
-      localStorage.setItem("eco_theme", "light");
-    } else {
-      setTheme("dark");
-      document.documentElement.classList.remove("light");
-      localStorage.setItem("eco_theme", "dark");
-    }
-  };
 
   const handleLogin = async () => {
     setIsLoggingIn(true);
     try {
       const mockUserData = await mockLogin();
       setUser(mockUserData);
-      sessionStorage.setItem("eco_user", JSON.stringify(mockUserData));
-    } catch (e) {
-      console.error(e);
+      sessionStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(mockUserData));
+    } catch (error) {
+      console.error("Login failed:", error);
     } finally {
       setIsLoggingIn(false);
     }
@@ -70,14 +49,8 @@ export default function Header() {
 
   const handleLogout = () => {
     setUser(null);
-    sessionStorage.removeItem("eco_user");
+    sessionStorage.removeItem(STORAGE_KEYS.USER);
   };
-
-  const navLinks = [
-    { href: "/dashboard", label: "Dashboard" },
-    { href: "/simulator", label: "Simulator" },
-    { href: "/coach", label: "AI Coach" },
-  ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
@@ -97,7 +70,7 @@ export default function Header() {
 
         {/* Center: Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          {navLinks.map((link) => {
+          {NAVIGATION.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
@@ -168,7 +141,7 @@ export default function Header() {
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="flex md:hidden items-center justify-center h-8 w-8 rounded-lg hover:bg-secondary border border-border text-foreground transition-all cursor-pointer"
-            aria-label="Toggle Navigation Menu"
+            aria-label={ARIA_LABELS.TOGGLE_MENU}
           >
             {isMobileMenuOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}
           </button>
@@ -186,7 +159,7 @@ export default function Header() {
             className="md:hidden border-t border-border bg-background overflow-hidden"
           >
             <div className="px-4 py-3 space-y-2.5">
-              {navLinks.map((link) => {
+              {NAVIGATION.map((link) => {
                 const isActive = pathname === link.href;
                 return (
                   <Link

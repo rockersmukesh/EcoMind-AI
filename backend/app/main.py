@@ -1,57 +1,48 @@
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from app.api.router import api_router
+from app.config import settings
+from app.schemas import HealthResponse
 
 # Load environment variables
 load_dotenv()
 
 app = FastAPI(
-    title="EcoAI Carbon Twin API",
-    description="Backend API for calculations, simulations, and Gemini AI sustainability coaching",
-    version="1.0.0",
+    title=settings.TITLE,
+    description=settings.DESCRIPTION,
+    version=settings.VERSION,
 )
 
 # Mount API router
 app.include_router(api_router, prefix="/api")
 
-# Configure CORS
-# Allow local Next.js frontend during development, and dynamically configure for production
-allowed_origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "https://ecomind-frontend-713090010081.us-central1.run.app",
-]
-
-# Support custom allowed origins from environment variable
-env_origins = os.getenv("ALLOWED_ORIGINS")
-if env_origins:
-    allowed_origins.extend(
-        [origin.strip() for origin in env_origins.split(",") if origin.strip()]
-    )
-
+# Configure CORS with settings from config
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=settings.ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-@app.get("/health")
-def health_check():
-    return {
-        "status": "healthy",
-        "service": "EcoAI Carbon Twin API",
-        "version": "1.0.0",
-    }
+@app.get("/health", response_model=HealthResponse)
+def health_check() -> HealthResponse:
+    """Health check endpoint for monitoring service availability"""
+    return HealthResponse(
+        status="healthy",
+        service=settings.TITLE,
+        version=settings.VERSION,
+    )
 
 
 if __name__ == "__main__":
     import uvicorn
 
-    port = int(os.getenv("PORT", 8080))
-    host = os.getenv("HOST", "0.0.0.0")
-    uvicorn.run("main:app", host=host, port=port, reload=True)
+    uvicorn.run(
+        "main:app",
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=settings.RELOAD,
+    )

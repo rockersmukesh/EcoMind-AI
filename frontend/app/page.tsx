@@ -1,5 +1,30 @@
 import Link from "next/link";
 import { Leaf, Sparkles, Target, Compass, ArrowRight, Shield } from "lucide-react";
+import FeatureCard from "@/components/FeatureCard";
+
+const FEATURES = [
+  {
+    icon: <Compass className="h-5 w-5" />,
+    title: "Carbon Twin Simulator",
+    description:
+      "Toggle lifestyle parameters (transit type, energy source, clothes/month) to simulate future emissions reductions in real-time.",
+    accentClass: "bg-primary/10 text-primary",
+  },
+  {
+    icon: <Sparkles className="h-5 w-5" />,
+    title: "Gemini AI Coach",
+    description:
+      "Consult a highly personalized conversational AI Coach that analyzes statistics to deliver low-cost, high-impact recommendations.",
+    accentClass: "bg-accent/10 text-accent",
+  },
+  {
+    icon: <Target className="h-5 w-5" />,
+    title: "Challenges & Gamification",
+    description:
+      "Participate in weekly sustainability challenges, gain eco-points, improve your Eco Score Level, and track achievements.",
+    accentClass: "bg-primary/10 text-primary",
+  },
+] as const;
 
 export default function Home() {
   return (
@@ -82,46 +107,15 @@ export default function Home() {
 
         {/* Feature Highlights Grid */}
         <div className="mx-auto max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-6 pb-20">
-          
-          {/* Feature 1 */}
-          <div className="glass-card rounded-2xl p-6 glow-on-hover flex flex-col justify-between h-56">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
-              <Compass className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="font-bold text-base text-foreground mb-1">Carbon Twin Simulator</h3>
-              <p className="text-xs text-foreground/70 leading-relaxed">
-                Toggle lifestyle parameters (transit type, energy source, clothes/month) to simulate future emissions reductions in real-time.
-              </p>
-            </div>
-          </div>
-
-          {/* Feature 2 */}
-          <div className="glass-card rounded-2xl p-6 glow-on-hover flex flex-col justify-between h-56">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-accent border border-accent/20">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="font-bold text-base text-foreground mb-1">Gemini AI Coach</h3>
-              <p className="text-xs text-foreground/70 leading-relaxed">
-                Consult a highly personalized conversational AI Coach that analyzes statistics to deliver low-cost, high-impact recommendations.
-              </p>
-            </div>
-          </div>
-
-          {/* Feature 3 */}
-          <div className="glass-card rounded-2xl p-6 glow-on-hover flex flex-col justify-between h-56">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
-              <Target className="text-primary h-5 w-5" />
-            </div>
-            <div>
-              <h3 className="font-bold text-base text-foreground mb-1">Challenges & Gamification</h3>
-              <p className="text-xs text-foreground/70 leading-relaxed">
-                Participate in weekly sustainability challenges, gain eco-points, improve your Eco Score Level, and track achievements.
-              </p>
-            </div>
-          </div>
-
+          {FEATURES.map((feature) => (
+            <FeatureCard
+              key={feature.title}
+              icon={feature.icon}
+              title={feature.title}
+              description={feature.description}
+              accentClass={feature.accentClass}
+            />
+          ))}
         </div>
 
       </main>
