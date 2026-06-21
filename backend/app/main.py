@@ -21,8 +21,13 @@ app.include_router(api_router, prefix="/api")
 allowed_origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    # Wildcards or production URLs can be set/loaded from env variables
+    "https://ecomind-frontend-713090010081.us-central1.run.app",
 ]
+
+# Support custom allowed origins from environment variable
+env_origins = os.getenv("ALLOWED_ORIGINS")
+if env_origins:
+    allowed_origins.extend([origin.strip() for origin in env_origins.split(",") if origin.strip()])
 
 app.add_middleware(
     CORSMiddleware,

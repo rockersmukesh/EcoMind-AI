@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function Header() {
   const pathname = usePathname();
   const [user, setUser] = useState<MockUser | null>(null);
-  const [ecoScore, setEcoScore] = useState<number>(72);
+  const [ecoScore] = useState<number>(72);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
@@ -131,11 +131,12 @@ export default function Header() {
 
               {/* User profile details */}
               <div className="flex items-center gap-2">
-                <img
-                  src={user.photoURL}
-                  alt={user.displayName}
-                  className="h-8 w-8 rounded-full border border-border"
-                />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={user.photoURL}
+                alt={user.displayName}
+                className="h-8 w-8 rounded-full border border-border"
+              />
                 <span className="hidden lg:inline text-sm font-medium text-foreground">{user.displayName}</span>
               </div>
 

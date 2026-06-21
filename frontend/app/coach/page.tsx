@@ -5,8 +5,7 @@ import Header from "@/components/shared/Header";
 import { fetchRecommendations, CarbonProfile, CalculationResult, CoachResponse } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Sparkles, Send, User, Bot, AlertTriangle, ArrowRight, 
-  HelpCircle, Trash, RefreshCw, CheckCircle 
+  Sparkles, Send, User, Bot, RefreshCw 
 } from "lucide-react";
 
 interface ChatMessage {
@@ -24,7 +23,7 @@ const INITIAL_PROFILE: CarbonProfile = {
 };
 
 export default function CoachPage() {
-  const [profile, setProfile] = useState<CarbonProfile>(INITIAL_PROFILE);
+  const [profile] = useState<CarbonProfile>(INITIAL_PROFILE);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<{ calculated_profile: CalculationResult, ai_coach_response: CoachResponse } | null>(null);
 
@@ -59,6 +58,7 @@ export default function CoachPage() {
 
   useEffect(() => {
     loadCoachRecommendations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSendChat = async (e: React.FormEvent) => {

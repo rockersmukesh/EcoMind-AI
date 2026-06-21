@@ -7,7 +7,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell
 } from "recharts";
-import { motion } from "framer-motion";
+
 import { 
   Leaf, TrendingDown, Target, CheckCircle2, Circle, AlertCircle,
   ArrowUpRight, Award, Plus, Calendar, Compass, ShieldCheck, RefreshCw
@@ -50,25 +50,22 @@ const HISTORICAL_TRENDS = [
 const COLORS = ["#10B981", "#3B82F6", "#F59E0B", "#EF4444"];
 
 export default function DashboardPage() {
-  const [profile, setProfile] = useState<CarbonProfile>(INITIAL_PROFILE);
-  const [loading, setLoading] = useState(false);
+  const [profile] = useState<CarbonProfile>(INITIAL_PROFILE);
   const [data, setData] = useState<{ calculated_profile: CalculationResult, ai_coach_response: CoachResponse } | null>(null);
   const [challenges, setChallenges] = useState<Challenge[]>(INITIAL_CHALLENGES);
 
   const loadDashboardData = async () => {
-    setLoading(true);
     try {
       const recommendations = await fetchRecommendations(profile);
       setData(recommendations);
     } catch (e) {
       console.error(e);
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
     loadDashboardData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const toggleChallenge = (id: string) => {

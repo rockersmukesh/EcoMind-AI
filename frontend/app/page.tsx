@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Leaf, RefreshCw, Sparkles, Target, Compass, ArrowRight, Shield } from "lucide-react";
+import { Leaf, Sparkles, Target, Compass, ArrowRight, Shield } from "lucide-react";
 
 export default function Home() {
   return (

@@ -4,9 +4,8 @@ import { useState, useEffect } from "react";
 import Header from "@/components/shared/Header";
 import { fetchSimulation, CarbonProfile, CalculationResult, SimulationResponse } from "@/lib/api";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Car, Leaf, ShieldAlert, Sparkles, RefreshCw, Zap, ShoppingBag, 
+  Car, Leaf, Sparkles, RefreshCw, Zap, ShoppingBag, 
   ChevronRight, Save, Award, Info 
 } from "lucide-react";
 
@@ -48,9 +47,10 @@ export default function SimulatorPage() {
   useEffect(() => {
     // Run initial calculations on mount
     triggerSimulation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSimulateChange = (section: keyof CarbonProfile, key: string, value: any) => {
+  const handleSimulateChange = (section: keyof CarbonProfile, key: string, value: string | number) => {
     setSimulated(prev => ({
       ...prev,
       [section]: {
@@ -408,7 +408,7 @@ export default function SimulatorPage() {
                       <span>Coach Verdict</span>
                     </h4>
                     <p className="text-xs text-foreground/80 italic leading-relaxed">
-                      "{simulationFeedback.coach_verdict}"
+                      &quot;{simulationFeedback.coach_verdict}&quot;
                     </p>
                   </div>
                 </div>
